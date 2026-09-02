@@ -6,9 +6,9 @@ Automatiza la configuración de una terminal con un prompt moderno usando **Star
 
 | Archivo | Descripción |
 |---|---|
-| `setup-terminal-starship-arch.sh` | Script para Arch Linux y derivadas (CachyOS, Manjaro, EndeavourOS...) |
-| `setup-terminal-starship-fedora.sh` | Script para Fedora y derivadas (Nobara...) |
-| `setup-terminal-starship-debian.sh` | Script para Debian, Ubuntu y derivadas |
+| `setup-terminal-starship-arch.sh` | Script para CachyOS (Arch Linux) |
+| `setup-terminal-starship-fedora.sh` | Script para Fedora |
+| `setup-terminal-starship-debian.sh` | Script para Debian |
 | `MANUAL-terminal-starship.md` | Tutorial paso a paso, explicado desde cero |
 | Este README | Explicación general y guía para elegir el script correcto |
 
@@ -18,11 +18,11 @@ Automatiza la configuración de una terminal con un prompt moderno usando **Star
 
 | Si tu distro es... | Usa este script |
 |---|---|
-| CachyOS, Arch Linux, Manjaro, EndeavourOS | `setup-terminal-starship-arch.sh` |
-| Fedora, Nobara | `setup-terminal-starship-fedora.sh` |
-| Debian, Ubuntu, Linux Mint, Pop!_OS | `setup-terminal-starship-debian.sh` |
+| CachyOS | `setup-terminal-starship-arch.sh` |
+| Fedora | `setup-terminal-starship-fedora.sh` |
+| Debian | `setup-terminal-starship-debian.sh` |
 
-Si tu distro no está en la lista pero se basa en una de estas (por ejemplo, cualquier distro basada en Arch, en Fedora o en Debian), el script correspondiente debería funcionarte igual.
+Cada script fue probado únicamente en la distro indicada, con KDE Plasma como entorno de escritorio. Puede funcionar en otras distros de la misma familia (Arch, Fedora o Debian) o con otros entornos de escritorio, pero eso no se ha verificado.
 
 ---
 
@@ -42,11 +42,11 @@ Los tres scripts son **idempotentes**: se pueden ejecutar varias veces sin rompe
 |---|---|---|
 | Arch/CachyOS | `pacman -S starship` | Está disponible en los repos oficiales |
 | Fedora | Instalador universal (`curl \| sh`) | No siempre está en los repos oficiales |
-| Debian/Ubuntu | Instalador universal (`curl \| sh`) | No está en los repos oficiales |
+| Debian | Instalador universal (`curl \| sh`) | No está en los repos oficiales |
 
 El instalador universal (`curl -sS https://starship.rs/install.sh | sh`) es el método oficial que ofrece el propio proyecto Starship, y descarga el binario directamente sin depender de ningún gestor de paquetes — por eso funciona igual en cualquier distro.
 
-Para la fuente, cada script usa el método más fiable en su distro: en Arch, el paquete oficial `ttf-meslo-nerd`; en Fedora, intenta el paquete del repositorio y si no existe descarga la fuente manualmente; en Debian/Ubuntu, va directo a la descarga manual desde el proyecto [nerd-fonts](https://github.com/ryanoasis/nerd-fonts), ya que no suele estar empaquetada en sus repos.
+Para la fuente, cada script usa el método más fiable en su distro: en Arch, el paquete oficial `ttf-meslo-nerd`; en Fedora, intenta el paquete del repositorio y si no existe descarga la fuente manualmente; en Debian, va directo a la descarga manual desde el proyecto [nerd-fonts](https://github.com/ryanoasis/nerd-fonts), ya que no suele estar empaquetada en sus repos.
 
 ---
 
@@ -54,9 +54,9 @@ Para la fuente, cada script usa el método más fiable en su distro: en Arch, el
 
 | Script | Estado |
 |---|---|
-| `setup-terminal-starship-arch.sh` | ✅ Validado en equipo real y en VM limpia de CachyOS |
-| `setup-terminal-starship-fedora.sh` | ⏳ Pendiente de validar en VM |
-| `setup-terminal-starship-debian.sh` | ⏳ Pendiente de validar en VM |
+| `setup-terminal-starship-arch.sh` | ✅ Probado en CachyOS (equipo real y VM), KDE Plasma |
+| `setup-terminal-starship-fedora.sh` | ✅ Probado en Fedora, KDE Plasma |
+| `setup-terminal-starship-debian.sh` | ✅ Probado en Debian 13, KDE Plasma |
 
 ---
 
@@ -85,7 +85,7 @@ Al terminar, el script te recuerda el único paso que **no** se puede automatiza
 
 ## Paso manual: configurar la fuente en tu emulador de terminal
 
-Elegir la fuente es un ajuste de interfaz gráfica que varía según el programa que uses. Aquí el ejemplo con **Konsole** (KDE Plasma):
+Elegir la fuente es un ajuste de interfaz gráfica que varía según el programa que uses. Este manual se probó con **Konsole** (KDE Plasma):
 
 1. Abrir Konsole → menú (☰) → **Configurar Konsole...**
 2. **Perfiles** → **+ Nuevo...**
@@ -95,7 +95,7 @@ Elegir la fuente es un ajuste de interfaz gráfica que varía según el programa
 6. **Aceptar** en la ventana de fuente, y **Aceptar** en la ventana del perfil
 7. Cerrar todas las ventanas y volver a abrir una nueva
 
-Si usas otro emulador de terminal (GNOME Terminal, Ptyxis, Alacritty...), el paso es equivalente: entra a las preferencias del perfil y busca la opción de tipo de letra, ahí selecciona una variante que diga "Nerd Font Mono".
+Si usas otro emulador de terminal o entorno de escritorio, el paso equivalente no se ha probado en este proyecto, pero normalmente sigue la misma lógica: entra a las preferencias del perfil y busca la opción de tipo de letra, ahí selecciona una variante que diga "Nerd Font Mono".
 
 ---
 
