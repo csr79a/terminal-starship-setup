@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# setup-terminal-starship.sh
+# setup-terminal-starship-arch.sh
 #
 # Script para automatizar la personalización de terminal con Starship:
 # - Instala Starship
@@ -9,24 +9,14 @@
 # - Activa Starship en bash
 # - Activa asteriscos al escribir la contraseña de sudo (pwfeedback)
 #
-# NOTA SOBRE COMPATIBILIDAD:
-# Este script usa "pacman", el gestor de paquetes de Arch Linux y sus
-# derivadas (probado en CachyOS). Si usas otra distro, cambia únicamente
-# las líneas que empiezan por "sudo pacman -S --noconfirm" por el
-# equivalente de tu sistema:
-#
-#   Fedora:          sudo dnf install -y <paquete>
-#   Ubuntu / Debian:  sudo apt install -y <paquete>
-#   openSUSE:         sudo zypper install -y <paquete>
-#
-# Los nombres de los paquetes también pueden variar ligeramente
-# según la distro (por ejemplo, la Nerd Font puede llamarse distinto
-# en cada repositorio). El resto del script (Starship, bash, sudoers)
-# funciona igual en cualquier distro basada en Linux.
+# Este script es para Arch Linux y derivadas (CachyOS, Manjaro,
+# EndeavourOS...), usando "pacman" como gestor de paquetes.
+# Para Fedora usa setup-terminal-starship-fedora.sh
+# Para Debian/Ubuntu usa setup-terminal-starship-debian.sh
 #
 # Uso:
-#   chmod +x setup-terminal-starship.sh
-#   ./setup-terminal-starship.sh
+#   chmod +x setup-terminal-starship-arch.sh
+#   ./setup-terminal-starship-arch.sh
 
 set -e  # Si algún comando falla, el script se detiene en vez de seguir con errores
 

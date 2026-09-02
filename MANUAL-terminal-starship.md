@@ -4,7 +4,7 @@ Esta guía explica, paso a paso y sin dar nada por sabido, cómo dejar tu termin
 
 No necesitas saber programar ni tener experiencia previa en Linux para seguir esta guía: solo copiar y pegar los comandos en el orden indicado.
 
-> Esta guía usa como ejemplo **CachyOS (Arch Linux) con Konsole**, pero funciona igual en cualquier distro — solo cambia el comando para instalar paquetes y el programa de terminal que uses. Al final de cada paso que lo necesite, se indica la alternativa para otras distros.
+> Esta guía cubre **Arch Linux/CachyOS, Fedora y Debian/Ubuntu** (las mismas distros que los scripts automatizados del repositorio). En cada paso que depende del gestor de paquetes se muestran los tres comandos, uno por distro — usa el que corresponda a la tuya. El resto de pasos (el diseño del prompt, `.bashrc`, el ajuste de `sudo`) es idéntico sea cual sea tu distro. El ejemplo visual (capturas y menús) usa **Konsole** en KDE Plasma, pero el proceso es equivalente en cualquier otro emulador de terminal.
 
 ---
 
@@ -19,23 +19,17 @@ No necesitas saber programar ni tener experiencia previa en Linux para seguir es
 
 ## Paso 1: Instalar Starship
 
-Abre tu terminal y escribe:
-
-```bash
-sudo pacman -S starship
-```
-
-**Si usas otra distro**, cambia ese comando por el equivalente:
+Abre tu terminal y ejecuta el comando correspondiente a tu distro:
 
 | Distro | Comando |
 |---|---|
-| Fedora | `sudo dnf install starship` |
-| Ubuntu / Debian | ver nota abajo* |
-| Cualquier distro (alternativa universal) | `curl -sS https://starship.rs/install.sh \| sh` |
+| Arch Linux / CachyOS / Manjaro | `sudo pacman -S starship` |
+| Fedora / Nobara | `curl -sS https://starship.rs/install.sh \| sh -s -- --yes` |
+| Debian / Ubuntu | `curl -sS https://starship.rs/install.sh \| sh -s -- --yes` |
 
-\* *Starship no siempre está en los repositorios de Ubuntu/Debian; en ese caso usa la alternativa universal con `curl`.*
+En Arch, Starship está en los repositorios oficiales. En Fedora y en Debian/Ubuntu no siempre está disponible en los repos, así que se usa el instalador oficial del propio proyecto Starship (descarga el binario directamente, sin depender de ningún gestor de paquetes).
 
-Te pedirá tu contraseña (no vas a ver nada mientras la escribes, es normal) y luego te preguntará si quieres continuar con la instalación — confirma con `S` o `Y` según tu idioma, y pulsa Enter.
+Si usas `pacman`, te pedirá tu contraseña (no vas a ver nada mientras la escribes, es normal) y luego te preguntará si quieres continuar — confirma con `S` o `Y` según tu idioma, y pulsa Enter. Si usas el instalador de `curl`, con `--yes` no hace falta confirmar nada.
 
 ---
 
@@ -49,19 +43,33 @@ fc-list | grep -i meslo
 
 Este comando busca entre todas tus fuentes instaladas si hay alguna de la familia "Meslo" (una Nerd Font muy usada). Si te aparece una lista larga de resultados, ya la tienes instalada y puedes saltar al Paso 3.
 
-Si no aparece nada, instálala:
+Si no aparece nada, instálala con el comando de tu distro:
+
+| Distro | Comando |
+|---|---|
+| Arch Linux / CachyOS / Manjaro | `sudo pacman -S ttf-meslo-nerd` |
+| Fedora / Nobara | `sudo dnf install -y meslo-lg-fonts` |
+| Debian / Ubuntu | *(no hay paquete oficial, ver instalación manual abajo)* |
+
+**Si el paquete de tu distro no existe o el comando falla** (esto pasa siempre en Debian/Ubuntu, y a veces en Fedora según la versión), instala la fuente manualmente:
 
 ```bash
-sudo pacman -S ttf-meslo-nerd
+mkdir -p ~/.local/share/fonts
+TMP_DIR=$(mktemp -d)
+curl -sSLo "$TMP_DIR/Meslo.zip" \
+    "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip"
+unzip -oq "$TMP_DIR/Meslo.zip" -d ~/.local/share/fonts
+rm -rf "$TMP_DIR"
+fc-cache -f ~/.local/share/fonts
 ```
 
-**Si usas otra distro** y ese paquete no existe con ese nombre, descarga la fuente manualmente desde [github.com/ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts) (elige "Meslo" en la lista de descargas) y cópiala a `~/.local/share/fonts/`, luego ejecuta `fc-cache -fv` para que el sistema la reconozca.
+*(En Debian/Ubuntu puede que necesites instalar antes las herramientas para descomprimir: `sudo apt install -y curl unzip fontconfig`.)*
 
 ---
 
 ## Paso 3: Configurar la fuente en tu terminal
 
-El programa de terminal necesita usar esa fuente especial para que los iconos se vean bien. El ejemplo aquí es para **Konsole** (KDE Plasma); si usas otro programa, el proceso es equivalente (busca "Preferencias" o "Perfil" y ahí la opción de tipo de letra).
+El programa de terminal necesita usar esa fuente especial para que los iconos se vean bien. El ejemplo aquí es para **Konsole** (KDE Plasma); si usas otro programa (GNOME Terminal, Ptyxis, Alacritty...), el proceso es equivalente: busca "Preferencias" o "Perfil" y ahí la opción de tipo de letra.
 
 1. Abre Konsole.
 2. Ve al menú (el icono con tres líneas horizontales, arriba a la izquierda) y haz clic en **"Configurar Konsole..."**.
@@ -76,6 +84,8 @@ El programa de terminal necesita usar esa fuente especial para que los iconos se
 11. Haz clic en **Aceptar** en la ventana de la fuente.
 12. Haz clic en **Aceptar** en la ventana del perfil para guardar todo.
 13. Cierra **todas** las ventanas de tu terminal que tengas abiertas y vuelve a abrir una nueva.
+
+Este paso es igual en las tres distros: no depende del gestor de paquetes, sino de la interfaz gráfica de tu emulador de terminal.
 
 ---
 
@@ -120,6 +130,8 @@ En este momento ya deberías ver tu nuevo prompt con colores, flechas y la hora 
 
 *(Si usas otro shell en vez de bash, por ejemplo zsh, el comando cambia a `eval "$(starship init zsh)"` y se añade a `~/.zshrc` en vez de `~/.bashrc`.)*
 
+Este paso también es idéntico en las tres distros.
+
 ---
 
 ## Paso 6: Comprobar que todo quedó bien
@@ -147,15 +159,15 @@ Debe mostrarte un número de versión, confirmando que el programa está instala
 
 Por defecto, cuando escribes tu contraseña después de `sudo`, no aparece absolutamente nada en pantalla (ni puntos ni asteriscos), por motivos de seguridad. Si prefieres ver asteriscos mientras escribes, sigue estos pasos. Este ajuste es idéntico en cualquier distro que use `sudo`.
 
-### 7.1. Instalar un editor de texto
+### 7.1. Instalar un editor de texto (opcional)
 
-Para hacer este cambio hace falta un editor de texto simple. Instala `nano`, que es muy fácil de usar:
+Este paso solo es necesario si prefieres editar el archivo de `sudo` a mano en vez de usar el comando directo del apartado 7.2. Si quieres tener `nano` instalado:
 
-```bash
-sudo pacman -S nano
-```
-
-(en Fedora: `sudo dnf install nano`; en Ubuntu/Debian normalmente ya viene instalado por defecto)
+| Distro | Comando |
+|---|---|
+| Arch Linux / CachyOS / Manjaro | `sudo pacman -S nano` |
+| Fedora / Nobara | `sudo dnf install -y nano` |
+| Debian / Ubuntu | normalmente ya viene instalado por defecto |
 
 ### 7.2. Editar el archivo de configuración de sudo
 
@@ -167,7 +179,7 @@ sudo chmod 440 /etc/sudoers.d/pwfeedback
 sudo visudo -c -f /etc/sudoers.d/pwfeedback
 ```
 
-El último comando debe responder algo como `/etc/sudoers.d/pwfeedback: parsed OK`, confirmando que no hay errores de sintaxis.
+El último comando debe responder algo como `/etc/sudoers.d/pwfeedback: parsed OK`, confirmando que no hay errores de sintaxis. Este paso es igual en las tres distros.
 
 *(Si prefieres editar el archivo principal de sudo directamente en vez de crear uno aparte, usa `sudo EDITOR=nano visudo`, añade la línea `Defaults pwfeedback` al final, y guarda con `Ctrl+O`, `Enter`, `Ctrl+X`.)*
 
@@ -197,12 +209,13 @@ source ~/.bashrc
 
 ```bash
 # 1. Instalar Starship
-sudo pacman -S starship
-# (otras distros: sudo dnf install starship / curl -sS https://starship.rs/install.sh | sh)
+sudo pacman -S starship                                          # Arch/CachyOS
+curl -sS https://starship.rs/install.sh | sh -s -- --yes         # Fedora / Debian / Ubuntu
 
 # 2. Comprobar la Nerd Font (si no aparece nada, instalarla)
 fc-list | grep -i meslo
-# sudo pacman -S ttf-meslo-nerd   (solo si el comando anterior no mostró nada)
+sudo pacman -S ttf-meslo-nerd            # Arch/CachyOS (solo si el comando anterior no mostró nada)
+sudo dnf install -y meslo-lg-fonts       # Fedora (si falla, instalación manual, ver Paso 2)
 
 # 3. La configuración de la fuente en tu terminal se hace desde la interfaz gráfica (ver Paso 3)
 
@@ -234,4 +247,12 @@ sudo visudo -c -f /etc/sudoers.d/pwfeedback
 
 ## ¿Prefieres automatizarlo?
 
-Este mismo repositorio incluye `setup-terminal-starship.sh`, un script que hace automáticamente los pasos 1, 2, 4, 5 y 7 de este manual (todo excepto el Paso 3, que requiere la interfaz gráfica). Consulta el `README.md` del repositorio para su uso.
+Este mismo repositorio incluye tres scripts que hacen automáticamente los pasos 1, 2, 4, 5 y 7 de este manual (todo excepto el Paso 3, que requiere la interfaz gráfica) — elige el que corresponda a tu distro:
+
+| Distro | Script |
+|---|---|
+| Arch Linux / CachyOS / Manjaro / EndeavourOS | `setup-terminal-starship-arch.sh` |
+| Fedora / Nobara | `setup-terminal-starship-fedora.sh` |
+| Debian / Ubuntu / Linux Mint / Pop!_OS | `setup-terminal-starship-debian.sh` |
+
+Consulta el `README.md` del repositorio para su uso.
